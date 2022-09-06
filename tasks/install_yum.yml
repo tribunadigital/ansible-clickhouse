@@ -22,19 +22,17 @@
 
 - name: Install by YUM | Ensure clickhouse package installed (latest)
   yum:
-    name: "{{ item }}"
+    name: "{{ clickhouse_package | flatten(levels=1) }}"
     state: latest
-  with_items: "{{ clickhouse_package }}"
   become: true
   tags: [install]
   when: clickhouse_version == "*"
 
 - name: Install by YUM | Ensure clickhouse package installed (version {{ clickhouse_version }})
   yum:
-    name: "{{ item }}-{{ clickhouse_version }}"
+    name: "{{ clickhouse_package | product([clickhouse_version]) | map('join', '-') }}"
     state: present
     disable_gpg_check: yes # Because Package clickhouse-server-base-19.4.0-2.x86_64.rpm is not signed
-  with_items: "{{ clickhouse_package }}"
   become: true
   tags: [install]
   when: clickhouse_version != "*"

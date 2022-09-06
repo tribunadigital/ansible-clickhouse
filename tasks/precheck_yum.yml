@@ -7,10 +7,12 @@
   check_mode: no
 
 - name: Requirements check | Check if Clickhouse is installed and has required version
-  shell: rpm -q --queryformat '%{VERSION}' "{{ item }}"
+  shell: rpm -q --queryformat '%{VERSION}' "{{ check_package }}"
   register: clickhouse_rt_versions_tmp
   ignore_errors: yes
   when: ansible_pkg_mgr == 'yum' and clickhouse_setup == 'package'
   changed_when: False
   check_mode: no
-  with_items: "{{ clickhouse_package }}"
+  loop: "{{ clickhouse_package | flatten(levels=1) }}"
+  loop_control:
+    loop_var: check_package

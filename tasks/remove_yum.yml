@@ -3,10 +3,9 @@
 
 - name: Uninstall by YUM | Ensure clickhouse package uninstalled
   yum:
-    name: "{{ item }}-{{ clickhouse_version }}"
+    name: "{{ clickhouse_package | product([clickhouse_version]) | map('join', '-') }}"
     state: absent
     autoremove: yes
-  with_items: "{{ clickhouse_package }}"
   become: true
 
 - name: Uninstall by YUM | Ensure clickhouse repo uninstalled
@@ -24,12 +23,14 @@
 
 - name: Remove clickhouse config,data and logs
   file:
-    dest: "{{ item }}"
+    dest: "{{ path_absent }}"
     state: absent
-  with_items:
+  loop:
     - "{{ clickhouse_path_logdir }}"
     - "{{ clickhouse_path_configdir }}"
     - "{{ clickhouse_path_tmp }}"
     - "{{ clickhouse_path_data }}"
+  loop_control:
+    loop_var: path_absent
   become: true
   when: clickhouse_remove_full|bool == True

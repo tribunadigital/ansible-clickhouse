@@ -1,14 +1,16 @@
 - name: Check clickhouse config, data and logs
   file:
-    dest: "{{ item }}"
+    dest: "{{ path_create }}"
     owner: clickhouse
     group: clickhouse
     state: directory
-  with_items:
+  loop:
     - "{{ clickhouse_path_logdir }}"
     - "{{ clickhouse_path_configdir }}"
     - "{{ clickhouse_path_tmp }}"
     - "{{ clickhouse_path_data }}"
+  loop_control:
+    loop_var: path_create
   notify: restart-ch
   become: true
 
@@ -69,4 +71,3 @@
   become: true
   when: clickhouse_zookeeper_nodes is defined 
 
-- meta: flush_handlers

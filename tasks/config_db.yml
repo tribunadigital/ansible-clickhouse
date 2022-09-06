@@ -8,18 +8,22 @@
 - name: Config | Delete database config
   command: |
     clickhouse-client -h 127.0.0.1 --port {{ clickhouse_tcp_port }}
-    -q 'DROP DATABASE IF EXISTS `{{ item.name }}`
-    {% if item.cluster is defined %}ON CLUSTER `{{ item.cluster }}`{% endif %}'
-  with_items: "{{ clickhouse_dbs }}"
-  when: item.state is defined and item.state == 'absent' and item.name in existing_databases.stdout_lines
+    -q 'DROP DATABASE IF EXISTS `{{ delete_db.name }}`
+    {% if delete_db.cluster is defined %}ON CLUSTER `{{ delete_db.cluster }}`{% endif %}'
+  loop: "{{ clickhouse_dbs }}"
+  loop_control:
+    loop_var: delete_db
+  when: delete_db.state is defined and delete_db.state == 'absent' and delete_db.name in existing_databases.stdout_lines
   tags: [config_db]
 
 - name: Config | Create database config
   command: |
     clickhouse-client -h 127.0.0.1 --port {{ clickhouse_tcp_port }}
-    -q 'CREATE DATABASE IF NOT EXISTS `{{ item.name }}`
-    {% if item.cluster is defined %}ON CLUSTER `{{ item.cluster }}`{% endif %}
-    {% if item.engine is defined %}ENGINE = {{ item.engine }}{% endif %}'
-  with_items: "{{ clickhouse_dbs }}"
-  when: (item.state is undefined or item.state == 'present') and item.name not in existing_databases.stdout_lines
+    -q 'CREATE DATABASE IF NOT EXISTS `{{ create_db.name }}`
+    {% if create_db.cluster is defined %}ON CLUSTER `{{ create_db.cluster }}`{% endif %}
+    {% if create_db.engine is defined %}ENGINE = {{ create_db.engine }}{% endif %}'
+  loop: "{{ clickhouse_dbs }}"
+  loop_control:
+    loop_var: create_db
+  when: (create_db.state is undefined or create_db.state == 'present') and create_db.name not in existing_databases.stdout_lines
   tags: [config_db]

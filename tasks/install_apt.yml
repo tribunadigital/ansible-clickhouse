@@ -25,7 +25,7 @@
 
 - name: Install by APT | Package installation
   apt:
-    name: "{{ clickhouse_package | product([clickhouse_version]) | map('join', '-') }}"
+    name: "{{ clickhouse_package | product([clickhouse_version]) | map('join', '=') }}"
     state: present
     force: yes
   become: true

@@ -347,8 +347,10 @@
          The same for max_partition_size_to_drop.
          Uncomment to disable protection.
     -->
-    <!-- <max_table_size_to_drop>0</max_table_size_to_drop> -->
     <!-- <max_partition_size_to_drop>0</max_partition_size_to_drop> -->
+
+    <max_table_size_to_drop>{{ clickhouse_config.max_table_size_to_drop }}</max_table_size_to_drop>
+    <max_partition_size_to_drop>{{ clickhouse_config.max_partition_size_to_drop }}</max_partition_size_to_drop>
 
     <!-- Example of parameters for GraphiteMergeTree table engine -->
     <graphite_rollup_example>

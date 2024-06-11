@@ -88,6 +88,8 @@ clickhouse_config:
   dictionaries_lazy_load: "{{ clickhouse_config_dictionaries_lazy_load }}"
   max_session_timeout: 3600
   default_session_timeout: 60
+  max_table_size_to_drop: 50GB
+  max_partition_size_to_drop: 50GB
 
 clickhouse_dicts: []
 

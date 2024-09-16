@@ -7,7 +7,7 @@
     msg: "Your distribution {{ ansible_distribution }}_{{ ansible_distribution_release }} not supported by this role,sorry."
   when: clickhouse_supported|bool != True
 
-- include: "{{ item }}"
+- include_tasks: "{{ item }}"
   with_first_found:
     - "precheck_{{ ansible_pkg_mgr }}.yml"
     - "empty.yml"

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- {{ ansible_managed }} -->
-<yandex>
+<clickhouse>
   <remote_servers>
 {% for shard_name, replicas in clickhouse_shards.items() | list %}
     <{{ shard_name }}>
@@ -19,4 +19,4 @@
     </{{ shard_name }}>
 {% endfor %}
   </remote_servers>
-</yandex>
+</clickhouse>

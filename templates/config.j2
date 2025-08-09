@@ -1,7 +1,7 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
 <?xml version="1.0"?>
 <!-- {{ ansible_managed }} -->
-<yandex>
+<clickhouse>
     <logger>
         <!-- Possible levels: https://github.com/pocoproject/poco/blob/develop/Foundation/include/Poco/Logger.h#L105 -->
         <level>{{ clickhouse_logger.level }}</level>
@@ -458,4 +458,4 @@
     </kafka_{{ kafka_topic }}>
 {% endfor %}
 
-</yandex>
+</clickhouse>
